@@ -1,0 +1,8 @@
+- hosts: localhost
+  connection: local
+  brcome: true
+
+  tasks:
+  - name: Print Serial Number
+    debug:
+      msg: "SN: {{ ansible_product_serial }}"
