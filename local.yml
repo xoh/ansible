@@ -24,15 +24,16 @@
   - name: Print Default v4
     ansible.builtin.debug:
       msg: "{{ ansible_default_ipv4.address|default(ansible_all_ipv4_addresses[0]) }}"
-  #- name: Create xoh.systems A record
-  #  community.general.cloudflare_dns:
-  #    zone: xoh.systems
-  #    record: "{{ ansible_product_serial | lower }}"
-  #    type: A
-  #    value: "{{ ansible_default_ipv4.address|default(ansible_all_ipv4_addresses[0]) }}"
-  #    api_token: "{{ cloudflare_token }}"
-  - community.general.sudoers:
+  - name: Create xoh.systems A record
+    community.general.cloudflare_dns:
+      zone: xoh.systems
+      record: "{{ ansible_product_serial | lower }}"
+      type: A
+      value: "{{ ansible_default_ipv4.address|default(ansible_all_ipv4_addresses[0]) }}"
+      api_token: "{{ cloudflare_token }}"
+  - name: Configure NOPASSWD for non-root user
+    community.general.sudoers:
       name: "xoh-nopasswd"
       user: "xoh"
       commands: "ALL"
-      nopasswd: true
+      nopassword: true
