@@ -33,6 +33,7 @@
   #    api_token: "{{ cloudflare_token }}"
   - name: NOPASSWD local user
     community.general.sudoers:
+      name: "xoh-nopasswd"
       user: "xoh"
       commands: "ALL"
       nopasswd: true
