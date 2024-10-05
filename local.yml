@@ -14,4 +14,4 @@
   #    var: hostvars[inventory_hostname]
   - name: Print Default v4
     debug:
-      msg: "{{ ansible_default_ipv4.address }}
+      msg: "{{ ansible_default_ipv4.address|default(ansible_all_ipv4_addresses[0]) }}"
