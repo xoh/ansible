@@ -1,6 +1,6 @@
 - hosts: localhost
   connection: local
-  brcome: true
+  become: true
 
   tasks:
   - name: Print Serial Number
