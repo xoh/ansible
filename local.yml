@@ -9,3 +9,6 @@
   - name: Set Hostname
     hostname:
       name: "{{ ansible_product_serial | lower }}"
+  - name: Dump Facts
+    debug:
+      msg: hostvars
