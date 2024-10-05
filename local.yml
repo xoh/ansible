@@ -9,6 +9,9 @@
   - name: Set Hostname
     hostname:
       name: "{{ ansible_product_serial | lower }}"
-  - name: Dump Facts
+  #- name: Dump Facts
+  #  debug:
+  #    var: hostvars[inventory_hostname]
+  - name: Print Default v4
     debug:
-      var: hostvars[inventory_hostname]
+      msg: "{{ ansible_default_ipv4.address }}
