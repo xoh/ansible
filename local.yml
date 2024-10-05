@@ -13,16 +13,16 @@
 
   tasks:
   - name: Print Serial Number
-    debug:
+    ansible.builtin.debug:
       msg: "SN: {{ ansible_product_serial }}"
   - name: Set Hostname
-    hostname:
+    ansible.builtin.hostname:
       name: "{{ ansible_product_serial | lower }}"
   #- name: Dump Facts
-  #  debug:
+  #  ansible.builtin.debug:
   #    var: hostvars[inventory_hostname]
   - name: Print Default v4
-    debug:
+    ansible.builtin.debug:
       msg: "{{ ansible_default_ipv4.address|default(ansible_all_ipv4_addresses[0]) }}"
   - name: Create xoh.systems A record
     community.general.cloudflare_dns:
@@ -31,3 +31,8 @@
       type: A
       value: "{{ ansible_default_ipv4.address|default(ansible_all_ipv4_addresses[0]) }}"
       api_token: "{{ cloudflare_token }}"
+  - name: Enable NOPASSWD for non-root user
+    community.general.sudoers:
+      user: "xoh"
+      commands: "ALL"
+      nopasswd: true
