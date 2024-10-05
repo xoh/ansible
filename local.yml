@@ -37,3 +37,16 @@
       user: "xoh"
       commands: "ALL"
       nopassword: true
+  - name: Install basic packages
+    ansible.builtin.apt:
+      name:
+        - htop
+        - iotop
+        - iftop
+        - byobu
+        - vim
+        - neofetch
+        - python3
+        - unzip
+        - locate
+      update_cache: true
