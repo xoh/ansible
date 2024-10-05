@@ -31,8 +31,7 @@
   #    type: A
   #    value: "{{ ansible_default_ipv4.address|default(ansible_all_ipv4_addresses[0]) }}"
   #    api_token: "{{ cloudflare_token }}"
-  - name: NOPASSWD local user
-    community.general.sudoers:
+  - community.general.sudoers:
       name: "xoh-nopasswd"
       user: "xoh"
       commands: "ALL"
