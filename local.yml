@@ -6,3 +6,6 @@
   - name: Print Serial Number
     debug:
       msg: "SN: {{ ansible_product_serial }}"
+  - name: Set Hostname
+    hostname:
+      name: "{{ ansible_product_serial | lower }}"
