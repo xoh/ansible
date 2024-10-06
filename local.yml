@@ -12,31 +12,9 @@
   become: true
 
   tasks:
-  - name: Print Serial Number
-    ansible.builtin.debug:
-      msg: "SN: {{ ansible_product_serial }}"
-  - name: Set Hostname
-    ansible.builtin.hostname:
-      name: "{{ ansible_product_serial | lower }}"
   #- name: Dump All Facts
   #  ansible.builtin.debug:
   #    var: hostvars[inventory_hostname]
-  - name: Print Default v4
-    ansible.builtin.debug:
-      msg: "{{ ansible_default_ipv4.address|default(ansible_all_ipv4_addresses[0]) }}"
-  - name: Create xoh.systems A record
-    community.general.cloudflare_dns:
-      zone: xoh.systems
-      record: "{{ ansible_product_serial | lower }}"
-      type: A
-      value: "{{ ansible_default_ipv4.address|default(ansible_all_ipv4_addresses[0]) }}"
-      api_token: "{{ cloudflare_token }}"
-  - name: Configure NOPASSWD for non-root user
-    community.general.sudoers:
-      name: "xoh-nopasswd"
-      user: "xoh"
-      commands: "ALL"
-      nopassword: true
   - name: Install basic packages
     ansible.builtin.apt:
       name:
@@ -50,3 +28,34 @@
         - unzip
         - locate
       update_cache: true
+  #- name: Print Serial Number
+  #  ansible.builtin.debug:
+  #    msg: "SN: {{ ansible_product_serial }}"
+  - name: Set Hostname
+    ansible.builtin.hostname:
+      name: "{{ ansible_product_serial | lower }}"
+  #- name: Print Default v4
+  #  ansible.builtin.debug:
+  #    msg: "{{ ansible_default_ipv4.address|default(ansible_all_ipv4_addresses[0]) }}"
+  - name: Configure NOPASSWD for non-root user
+    community.general.sudoers:
+      name: "xoh-nopasswd"
+      user: "xoh"
+      commands: "ALL"
+      nopassword: true
+  - name: Create xoh.systems A record
+    community.general.cloudflare_dns:
+      zone: xoh.systems
+      record: "{{ ansible_product_serial | lower }}"
+      type: A
+      value: "{{ ansible_default_ipv4.address|default(ansible_all_ipv4_addresses[0]) }}"
+      api_token: "{{ cloudflare_token }}"
+      state: present
+  - name: Add system to xoh.systems inventory
+    community.general.cloudflare_dns:
+      zone: xoh.systems
+      record: "inventory"
+      type: TXT
+      value: "{{ ansible_product_serial | lower }}"
+      api_token: "{{ cloudflare_token }}"
+      state: present
