@@ -51,11 +51,11 @@
       value: "{{ ansible_default_ipv4.address|default(ansible_all_ipv4_addresses[0]) }}"
       api_token: "{{ cloudflare_token }}"
       state: present
-  - name: Add system to xoh.systems inventory
-    community.general.cloudflare_dns:
-      zone: xoh.systems
-      record: "inventory"
-      type: TXT
-      value: "{{ ansible_product_serial | lower }}"
-      api_token: "{{ cloudflare_token }}"
-      state: present
+  #- name: Add system to xoh.systems inventory
+  #  community.general.cloudflare_dns:
+  #    zone: xoh.systems
+  #    record: "inventory"
+  #    type: TXT
+  #    value: "{{ ansible_product_serial | lower }}"
+  #    api_token: "{{ cloudflare_token }}"
+  #    state: present
