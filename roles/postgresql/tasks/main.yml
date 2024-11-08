@@ -1,0 +1,28 @@
+- name: Install PostgreSQL
+  ansible.builtin.apt:
+    name: postgresql
+    update_cache: true
+
+- name: Add DBUSER
+  community.postgresql.postgresql_user:
+    name: "{{ db_user_name }}"
+    password: "{{ db_user_password }}"
+  tags: createuser
+
+- name: Add DB
+  community.postgresql.postgresql_db:
+    name: "{{ db_name }}"
+  tags: createdb
+
+- name: Permit DBUSER to DB
+  community.postgresql.postgresql_pg_hba:
+    #  host    $MAAS_DBNAME    $MAAS_DBUSER    0/0     md5
+    dest: "/etc/postgresql/14/main/pg_hba.conf"
+    contype: host
+    databases: "{{ db_name }}"
+    users: "{{ db_user_name }}"
+    address: "samehost"
+    method: "md5"
+  tags:
+  - createdb
+  - createuser
