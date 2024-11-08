@@ -2,6 +2,11 @@
   ansible.builtin.apt_repository:
     repo: "ppa:maas/{{ maas_version }}"
 
+- name: Uninstall conflicting systemd-timesyncd
+  ansible.builtin.apt:
+    name: systemd-timesyncd
+    state: absent
+
 - name: Install MAAS
   ansible.builtin.apt:
     name: maas
