@@ -3,13 +3,27 @@
     name: postgresql
     update_cache: true
 
+- name: Install PostgreSQL python module
+  ansible.builtin.pip:
+    name: psycopg2-binary
+
+- name: Start and enable PostgreSQL
+  ansible.builtin.systemd:
+    state: started
+    name: postgresql
+    enabled: true
+
 - name: Add DBUSER
+  become: true
+  become_user: postgres
   community.postgresql.postgresql_user:
     name: "{{ db_user_name }}"
     password: "{{ db_user_password }}"
   tags: createuser
 
 - name: Add DB
+  become: true
+  become_user: postgres
   community.postgresql.postgresql_db:
     name: "{{ db_name }}"
   tags: createdb
@@ -24,5 +38,7 @@
     address: "samehost"
     method: "md5"
   tags:
-  - createdb
-  - createuser
+    - createdb
+    - createuser
+  notify:
+    - Restart PostgreSQL
