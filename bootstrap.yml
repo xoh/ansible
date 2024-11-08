@@ -33,5 +33,5 @@
       record: "{{ ansible_product_serial | lower }}"
       type: A
       value: "{{ ansible_default_ipv4.address|default(ansible_all_ipv4_addresses[0]) }}"
-      api_token: "{{ secrets.cloudflare_token_dns_xohira_systems }}"
+      api_token: "{{ secrets.cloudflare_token_dns_xoh_systems }}"
       state: present
