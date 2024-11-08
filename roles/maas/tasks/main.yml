@@ -22,3 +22,8 @@
   community.general.snap:
     name: maas
     channel: "{{ maas_version }}"
+  register: maas_installed
+
+- name: Initialize MAAS
+  ansible.builtin.command: "maas init region+rack --database-uri \"postgres://{{ db_user_name }}:{{ db_user_password }}@localhost/{{ db_name }}\""
+    

@@ -8,5 +8,7 @@
         db_user_password: "{{ secrets.maas_postgresql_pguser }}"
         db_name: "maas"
     - role: maas
+      vars:
+        db_user_password: "{{ secrets.maas_postgresql_pguser }}"
   vars_files:
     - "{{ bootstrap_vault }}"

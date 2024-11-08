@@ -1,1 +1,3 @@
 maas_version: "3.5"
+db_user_name: "maas"
+db_name: "maas"
