@@ -46,6 +46,8 @@
   meta: flush_handlers
 
 - name: Grant permissions to DBUSER
+  become: true
+  become_user: postgres
   community.postgresql.postgresql_privs:
     database: "{{ db_name }}"
     roles: "{{ db_user_name }}"
