@@ -41,3 +41,16 @@
     - createuser
   notify:
     - Restart PostgreSQL
+
+- name: Flush handlers
+  meta: flush_handlers
+
+- name: Grant permissions to DBUSER
+  community.postgresql.postgresql_privs:
+    database: "{{ db_name }}"
+    roles: "{{ db_user_name }}"
+    privs: ALL
+    type: database
+  tags:
+    - createdb
+    - createuser
