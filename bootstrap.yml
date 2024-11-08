@@ -1,0 +1,37 @@
+- hosts: localhost
+  connection: local
+  vars_files:
+    - "{{ bootstrap_vault }}"
+  become: true
+
+  tasks:
+  - name: Install basic packages
+    ansible.builtin.apt:
+      name:
+        - htop
+        - iotop
+        - iftop
+        - byobu
+        - vim
+        - neofetch
+        - python3
+        - unzip
+        - locate
+      update_cache: true
+  - name: Set Hostname
+    ansible.builtin.hostname:
+      name: "{{ ansible_product_serial | lower }}"
+  - name: Configure NOPASSWD for non-root user
+    community.general.sudoers:
+      name: "xoh-nopasswd"
+      user: "xoh"
+      commands: "ALL"
+      nopassword: true
+  - name: Create xoh.systems A record
+    community.general.cloudflare_dns:
+      zone: xoh.systems
+      record: "{{ ansible_product_serial | lower }}"
+      type: A
+      value: "{{ ansible_default_ipv4.address|default(ansible_all_ipv4_addresses[0]) }}"
+      api_token: "{{ secrets.cloudflare_token_dns_xohira_systems }}"
+      state: present
