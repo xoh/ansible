@@ -4,6 +4,5 @@
 
 - name: Install MAAS
     ansible.builtin.apt:
-      name:
-        - MAAS
+      name: MAAS
       update_cache: true
