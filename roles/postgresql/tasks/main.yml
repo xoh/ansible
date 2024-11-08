@@ -30,12 +30,11 @@
 
 - name: Permit DBUSER to DB
   community.postgresql.postgresql_pg_hba:
-    #  host    $MAAS_DBNAME    $MAAS_DBUSER    0/0     md5
     dest: "/etc/postgresql/14/main/pg_hba.conf"
     contype: host
     databases: "{{ db_name }}"
     users: "{{ db_user_name }}"
-    address: "samehost"
+    address: "all"
     method: "md5"
   tags:
     - createdb
