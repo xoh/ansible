@@ -1,13 +1,24 @@
-- name: Add MAAS repository from PPA
-  ansible.builtin.apt_repository:
-    repo: "ppa:maas/{{ maas_version }}"
+#- name: Add MAAS repository from PPA
+#  ansible.builtin.apt_repository:
+#    repo: "ppa:maas/{{ maas_version }}"
 
-- name: Uninstall conflicting systemd-timesyncd
-  ansible.builtin.apt:
+#- name: Uninstall conflicting systemd-timesyncd
+#  ansible.builtin.apt:
+#    name: systemd-timesyncd
+#    state: absent
+
+#- name: Install MAAS
+#  ansible.builtin.apt:
+#    name: maas
+#    update_cache: true
+
+- name: Disable systemd-timesyncd
+  ansible.builtin.systemd:
     name: systemd-timesyncd
-    state: absent
+    state: stopped
+    enabled: false
 
-- name: Install MAAS
-  ansible.builtin.apt:
+- name: Install MAAS via SNAP
+  community.general.snap:
     name: maas
-    update_cache: true
+    channel: "{{ maas_version }}"
