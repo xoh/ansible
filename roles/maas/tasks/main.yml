@@ -1,3 +1,9 @@
-- name: Add maas repository from PPA
+- name: Add MAAS repository from PPA
   ansible.builtin.apt_repository:
     repo: "ppa:maas/{{ maas_version }}"
+
+- name: Install MAAS
+    ansible.builtin.apt:
+      name:
+        - MAAS
+      update_cache: true
