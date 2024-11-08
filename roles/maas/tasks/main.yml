@@ -3,6 +3,6 @@
     repo: "ppa:maas/{{ maas_version }}"
 
 - name: Install MAAS
-    ansible.builtin.apt:
-      name: MAAS
-      update_cache: true
+  ansible.builtin.apt:
+    name: MAAS
+    update_cache: true
