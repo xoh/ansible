@@ -30,7 +30,6 @@
     line: "database_pass: {{ db_user_password }}"
   check_mode: true
   register: initialized
-  changed_when: false
 
 - name: Initialize MAAS
   ansible.builtin.command: "maas init region+rack --database-uri \"postgres://{{ db_user_name }}:{{ db_user_password }}@localhost/{{ db_name }}\" --maas-url \"http://{{ ansible_default_ipv4.address|default(ansible_all_ipv4_addresses[0]) }}:5240/MAAS\""
