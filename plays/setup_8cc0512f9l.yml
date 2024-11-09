@@ -10,5 +10,9 @@
     - role: maas
       vars:
         db_user_password: "{{ secrets.maas_postgresql_pguser }}"
+        maas_admin_name: "xoh"
+        maas_admin_password: "{{ secrets.maas_admin }}"
+        maas_admin_mail: "xoh@xoh.dev"
+        maas_admin_key: "gh:xoh"
   vars_files:
     - "{{ bootstrap_vault }}"
