@@ -37,3 +37,4 @@
 
 - name: Create MAAS admin
   ansible.builtin.command: "maas createadmin --username {{ maas_admin_name }} --password {{ maas_admin_password }} --email {{ maas_admin_mail }} --ssh-import {{ maas_admin_key }}"
+  when: initialized.changed
