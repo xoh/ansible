@@ -26,6 +26,7 @@
   become_user: postgres
   community.postgresql.postgresql_db:
     name: "{{ db_name }}"
+    owner: "{{ db_user_name }}"
   tags: createdb
 
 - name: Permit DBUSER to DB
