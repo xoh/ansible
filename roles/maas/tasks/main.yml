@@ -24,8 +24,17 @@
     channel: "{{ maas_version }}"
   register: maas_installed
 
+- name: Check if MAAS is initialized
+  lineinfile: 
+    dest: "/var/snap/maas/current/regiond.conf"
+    line: "database_pass: {{ db_user_password }}"
+  check_mode: true
+  register: initialized
+  changed_when: false
+
 - name: Initialize MAAS
   ansible.builtin.command: "maas init region+rack --database-uri \"postgres://{{ db_user_name }}:{{ db_user_password }}@localhost/{{ db_name }}\" --maas-url \"http://{{ ansible_default_ipv4.address|default(ansible_all_ipv4_addresses[0]) }}:5240/MAAS\""
+  when: "{{ initialized.changed }}"
 
 - name: Create MAAS admin
   ansible.builtin.command: "maas createadmin --username {{ maas_admin_name }} --password {{ maas_admin_password }} --email {{ maas_admin_mail }} --ssh-import {{ maas_admin_key }}"
