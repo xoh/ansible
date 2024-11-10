@@ -70,3 +70,12 @@
 - name: Initiate image download
   ansible.builtin.command:
     cmd: "maas {{ maas_admin_name }} boot-resources import"
+
+- name: Create MAAS A record
+  community.general.cloudflare_dns:
+    zone: xoh.systems
+    record: "maas.xoh.systems"
+    type: A
+    value: "{{ ansible_default_ipv4.address|default(ansible_all_ipv4_addresses[0]) }}"
+    api_token: "{{ secrets.cloudflare_token_dns_xoh_systems }}"
+    state: present
