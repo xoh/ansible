@@ -1,4 +1,4 @@
-- hosts: 8cc0512f9l
+- hosts: localhost
   become: true
   gather_facts: true
   roles:
