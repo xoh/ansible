@@ -1,16 +1,11 @@
-#- name: Add MAAS repository from PPA
-#  ansible.builtin.apt_repository:
-#    repo: "ppa:maas/{{ maas_version }}"
-
-#- name: Uninstall conflicting systemd-timesyncd
-#  ansible.builtin.apt:
-#    name: systemd-timesyncd
-#    state: absent
-
-#- name: Install MAAS
-#  ansible.builtin.apt:
-#    name: maas
-#    update_cache: true
+- name: Create MAAS A record
+  community.general.cloudflare_dns:
+    zone: xoh.systems
+    record: "{{ maas_domain }}"
+    type: A
+    value: "{{ ansible_default_ipv4.address|default(ansible_all_ipv4_addresses[0]) }}"
+    api_token: "{{ secrets.cloudflare_token_dns_xoh_systems }}"
+    state: present
 
 - name: Disable systemd-timesyncd
   ansible.builtin.systemd:
@@ -33,7 +28,7 @@
 
 - name: Initialize MAAS
   ansible.builtin.command:
-    cmd: "maas init region+rack --database-uri \"postgres://{{ db_user_name }}:{{ db_user_password }}@localhost/{{ db_name }}\" --maas-url \"http://{{ ansible_default_ipv4.address|default(ansible_all_ipv4_addresses[0]) }}:5240/MAAS\""
+    cmd: "maas init region+rack --database-uri \"postgres://{{ db_user_name }}:{{ db_user_password }}@localhost/{{ db_name }}\" --maas-url \"{{ maas_url }}\""
   when: initialized.changed
 
 - name: Create MAAS admin
@@ -48,7 +43,7 @@
 
 - name: Login to MAAS via API
   ansible.builtin.command:
-    cmd: "maas login {{ maas_admin_name }} http://{{ ansible_default_ipv4.address|default(ansible_all_ipv4_addresses[0]) }}:5240/MAAS/api/2.0/ {{ maas_apikey.stdout }}"
+    cmd: "maas login {{ maas_admin_name }} {{ maas_url }}/api/2.0/ {{ maas_apikey.stdout }}"
   register: login
   until: login is not failed
   retries: 5
@@ -75,15 +70,6 @@
   ansible.builtin.command:
     cmd: "maas {{ maas_admin_name }} boot-resources import"
 
-- name: Create MAAS A record
-  community.general.cloudflare_dns:
-    zone: xoh.systems
-    record: "maas.xoh.systems"
-    type: A
-    value: "{{ ansible_default_ipv4.address|default(ansible_all_ipv4_addresses[0]) }}"
-    api_token: "{{ secrets.cloudflare_token_dns_xoh_systems }}"
-    state: present
-
 - name: Continue MAAS setup
   debug:
-    msg: "Continue to http://maas.xoh.systems:5240/ to continue the setup"
+    msg: "Continue to {{ maas_url }} to finish the installation"
