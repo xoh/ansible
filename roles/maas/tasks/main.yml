@@ -83,3 +83,7 @@
     value: "{{ ansible_default_ipv4.address|default(ansible_all_ipv4_addresses[0]) }}"
     api_token: "{{ secrets.cloudflare_token_dns_xoh_systems }}"
     state: present
+
+- name: Continue MAAS setup
+  debug:
+    msg: "Continue to http://maas.xoh.systems:5240/ to continue the setup"
