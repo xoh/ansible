@@ -52,8 +52,9 @@
 
 - name: Login to MAAS via API
   ansible.builtin.command:
-    cmd: "maas login {{ maas_admin_name }} http://{{ ansible_default_ipv4.address|default(ansible_all_ipv4_addresses[0]) }}:5240/MAAS/api/2.0/"
+    #cmd: "maas login {{ maas_admin_name }} http://{{ ansible_default_ipv4.address|default(ansible_all_ipv4_addresses[0]) }}:5240/MAAS/api/2.0/"
+    cmd: "cat -"
     stdin: "{{ maas_apikey.stdout }}"
 
-- name: Set MAAS upstream DNS
-  ansible.builtin.command: "maas {{ maas_admin_name }} maas set-config name=upstream_dns value=\"{{ upstream_dns }}\""
+#- name: Set MAAS upstream DNS
+#  ansible.builtin.command: "maas {{ maas_admin_name }} maas set-config name=upstream_dns value=\"{{ upstream_dns }}\""
