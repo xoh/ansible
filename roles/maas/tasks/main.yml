@@ -68,7 +68,7 @@
   with_items: "{{ maas_images }}"
   register: maas_image_command
   failed_when:
-    - maas_image_command.rc }} != 0
+    - maas_image_command.rc != 0
     - "'Boot source selection with this Boot source, Os and Release already exists" not in maas_image_command.stdout'
 
 - name: Initiate image download
