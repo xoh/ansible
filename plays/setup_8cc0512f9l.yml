@@ -14,5 +14,6 @@
         maas_admin_password: "{{ secrets.maas_admin }}"
         maas_admin_mail: "xoh@xoh.dev"
         maas_admin_key: "gh:xoh"
+        maas_name: "lls21"
   vars_files:
     - "{{ bootstrap_vault }}"

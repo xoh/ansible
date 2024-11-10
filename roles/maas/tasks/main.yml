@@ -56,3 +56,6 @@
 
 - name: Set MAAS upstream DNS
   ansible.builtin.command: "maas {{ maas_admin_name }} maas set-config name=upstream_dns value=\"{{ upstream_dns }}\""
+
+- name: Set MAAS region name
+  ansible.builtin.command: "maas {{ maas_admin_name }} maas set-config name=maas_name value=\"{{ maas_name }}\""
