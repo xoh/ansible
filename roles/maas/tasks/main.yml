@@ -46,6 +46,10 @@
     cmd: "maas apikey --username {{ maas_admin_name }}"
   register: maas_apikey
 
+- name: DEBUG Print API key
+  ansible.builtin.debug:
+    msg: "{{ maas_apikey.stdout }}"
+
 - name: Login to MAAS via API
   ansible.builtin.command:
     cmd: "maas login {{ maas_admin_name }} http://{{ ansible_default_ipv4.address|default(ansible_all_ipv4_addresses[0]) }}:5240/MAAS/api/2.0/"
