@@ -4,5 +4,5 @@ db_name: "maas"
 upstream_dns: "8.8.8.8 8.8.4.4"
 maas_name: "maas"
 maas_images:
-  - { id: 1, os: ubuntu, release: "jammy", arches: "amd64", subarches: "*", labels: "*" }
-  - { id: 2, os: ubuntu, release: "noble", arches: "amd64", subarches: "*", labels: "*" }
+  - { os: ubuntu, release: "jammy", arches: "amd64", subarches: "*", labels: "*" }
+  - { os: ubuntu, release: "noble", arches: "amd64", subarches: "*", labels: "*" }

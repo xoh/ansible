@@ -64,7 +64,7 @@
 
 - name: Define MAAS images
   ansible.builtin.command:
-    cmd: "maas {{ maas_admin_name }} boot-source-selections create {{ item.id }} os='{{ item.os }}' release='{{ item.release }}' arches='{{ item.arches }}' subarches='{{ item.subarches }}' labels='{{ item.labels }}'"
+    cmd: "maas {{ maas_admin_name }} boot-source-selections create 1 os='{{ item.os }}' release='{{ item.release }}' arches='{{ item.arches }}' subarches='{{ item.subarches }}' labels='{{ item.labels }}'"
   with_items: "{{ maas_images }}"
 
 - name: Initiate image download
