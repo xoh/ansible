@@ -59,7 +59,7 @@
     cmd: "maas {{ maas_admin_name }} maas set-config name=upstream_dns value=\"{{ upstream_dns }}\""
 
 - name: Set MAAS region name
-  ansible.builtin.command
+  ansible.builtin.command:
     cmd: "maas {{ maas_admin_name }} maas set-config name=maas_name value=\"{{ maas_name }}\""
 
 - name: Define MAAS images
