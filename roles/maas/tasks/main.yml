@@ -38,3 +38,15 @@
 - name: Create MAAS admin
   ansible.builtin.command: "maas createadmin --username {{ maas_admin_name }} --password {{ maas_admin_password }} --email {{ maas_admin_mail }} --ssh-import {{ maas_admin_key }}"
   when: initialized.changed
+
+- name: Query API key
+  ansible.builtin.command: "maas apikey --username {{ maas_admin_name }}"
+  register: maas_apikey
+
+- name: Login to MAAS via API
+  ansible.builtin.command: "maas login --username {{ maas_admin_name }}"
+  args:
+    stdin: "{{ maas_apikey.stdout }}"
+
+- name: Set MAAS upstream DNS
+  ansible.builtin.command: "maas {{ maas_admin_name }} maas set-config name=upstream_dns value=\"{{ upstream_dns }}\""
