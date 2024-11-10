@@ -66,6 +66,10 @@
   ansible.builtin.command:
     cmd: "maas {{ maas_admin_name }} boot-source-selections create 1 os='{{ item.os }}' release='{{ item.release }}' arches='{{ item.arches }}' subarches='{{ item.subarches }}' labels='{{ item.labels }}'"
   with_items: "{{ maas_images }}"
+  register: maas_image_command
+  failed_when:
+    - maas_image_command.rc }} != 0
+    - "'Boot source selection with this Boot source, Os and Release already exists" not in maas_image_command.stdout'
 
 - name: Initiate image download
   ansible.builtin.command:
