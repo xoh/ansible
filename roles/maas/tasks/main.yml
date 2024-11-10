@@ -32,21 +32,25 @@
   register: initialized
 
 - name: Initialize MAAS
-  ansible.builtin.command: "maas init region+rack --database-uri \"postgres://{{ db_user_name }}:{{ db_user_password }}@localhost/{{ db_name }}\" --maas-url \"http://{{ ansible_default_ipv4.address|default(ansible_all_ipv4_addresses[0]) }}:5240/MAAS\""
+  ansible.builtin.command:
+    cmd: "maas init region+rack --database-uri \"postgres://{{ db_user_name }}:{{ db_user_password }}@localhost/{{ db_name }}\" --maas-url \"http://{{ ansible_default_ipv4.address|default(ansible_all_ipv4_addresses[0]) }}:5240/MAAS\""
   when: initialized.changed
 
 - name: Create MAAS admin
-  ansible.builtin.command: "maas createadmin --username {{ maas_admin_name }} --password {{ maas_admin_password }} --email {{ maas_admin_mail }} --ssh-import {{ maas_admin_key }}"
+  ansible.builtin.command:
+    cmd: "maas createadmin --username {{ maas_admin_name }} --password {{ maas_admin_password }} --email {{ maas_admin_mail }} --ssh-import {{ maas_admin_key }}"
   when: initialized.changed
 
 - name: Query API key
-  ansible.builtin.command: "maas apikey --username {{ maas_admin_name }}"
+  ansible.builtin.command:
+    cmd: "maas apikey --username {{ maas_admin_name }}"
   register: maas_apikey
 
 - name: Login to MAAS via API
-  ansible.builtin.command: "maas login {{ maas_admin_name }} http://{{ ansible_default_ipv4.address|default(ansible_all_ipv4_addresses[0]) }}:5240/MAAS/api/2.0/"
-  args:
-    stdin: "{{ maas_apikey.stdout }}"
+  ansible.builtin.command:
+    cmd: "maas login {{ maas_admin_name }} http://{{ ansible_default_ipv4.address|default(ansible_all_ipv4_addresses[0]) }}:5240/MAAS/api/2.0/"
+    args:
+      stdin: "{{ maas_apikey.stdout }}"
 
 - name: Set MAAS upstream DNS
   ansible.builtin.command: "maas {{ maas_admin_name }} maas set-config name=upstream_dns value=\"{{ upstream_dns }}\""
