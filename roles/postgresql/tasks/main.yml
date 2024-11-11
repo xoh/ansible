@@ -1,11 +1,9 @@
-- name: Install PostgreSQL
+- name: Install PostgreSQL & psycopg2 Python library
   ansible.builtin.apt:
-    name: postgresql
+    name:
+      - postgresql
+      - python3-psycopg2
     update_cache: true
-
-- name: Install PostgreSQL python module
-  ansible.builtin.pip:
-    name: psycopg2-binary
 
 - name: Start and enable PostgreSQL
   ansible.builtin.systemd:
