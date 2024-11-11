@@ -7,3 +7,5 @@ maas_images:
   - { os: ubuntu, release: "jammy", arches: "amd64", subarches: "*", labels: "*" }
   - { os: ubuntu, release: "noble", arches: "amd64", subarches: "*", labels: "*" }
 maas_url: "http://{{ maas_domain }}:5240/MAAS"
+maas_deploy_default: noble
+maas_commission_default: noble

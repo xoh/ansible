@@ -79,6 +79,26 @@
   ansible.builtin.command:
     cmd: "maas {{ maas_admin_name }} boot-resources import"
 
+- name: Set commissioning default
+  ansible.builtin.command:
+    cmd: "maas {{ maas_admin_name }} maas set-config name=commissioning_distro_series value={{ maas_commission_default }}"
+  register: set_comm_def
+  until: set_comm_def is not failed
+  retries: 10
+  delay: 30
+
+- name: Set deploy default
+  ansible.builtin.command:
+    cmd: "maas {{ maas_admin_name }} maas set-config name=default_distro_series value={{ maas_deploy_default }}"
+  register: set_dep_def
+  until: set_dep_def is not failed
+  retries: 10
+  delay: 30
+
+- name: Disable configuration intro
+  ansible.builtin.command:
+    cmd: "maas {{ maas_admin_name }} maas set-config name=completed_intro value=true"
+
 - name: Continue MAAS setup
   debug:
     msg: "Continue to {{ maas_url }} to finish the installation"
