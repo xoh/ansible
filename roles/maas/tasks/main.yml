@@ -1,9 +1,9 @@
-- name: Create MAAS A record
+- name: Create MAAS CNAME record
   community.general.cloudflare_dns:
     zone: xoh.systems
     record: "{{ maas_domain }}"
-    type: A
-    value: "{{ ansible_default_ipv4.address|default(ansible_all_ipv4_addresses[0]) }}"
+    type: CNAME
+    value: "{{ ansible_product_serial | lower }}"
     api_token: "{{ secrets.cloudflare_token_dns_xoh_systems }}"
     state: present
 
