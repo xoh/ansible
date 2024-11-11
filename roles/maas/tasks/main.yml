@@ -40,6 +40,7 @@
   ansible.builtin.command:
     cmd: "maas apikey --username {{ maas_admin_name }}"
   register: maas_apikey
+  changed_when: false
 
 - name: Wait for DNS & API Endpoint
   wait_for:
@@ -49,6 +50,7 @@
     sleep: 60
     timeout: 900
     msg: "Failed to connect to {{ maas_url }}. Possible DNS induced delay."
+  changed_when: false
 
 - name: Login to MAAS via API
   ansible.builtin.command:
@@ -57,6 +59,7 @@
   until: login is not failed
   retries: 5
   delay: 2
+  changed_when: false
 
 - name: Set MAAS upstream DNS
   ansible.builtin.command:
