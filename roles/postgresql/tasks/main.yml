@@ -29,7 +29,7 @@
 
 - name: Permit DBUSER to DB
   community.postgresql.postgresql_pg_hba:
-    dest: "/etc/postgresql/14/main/pg_hba.conf"
+    dest: "/etc/postgresql/{{ pg_version }}/main/pg_hba.conf"
     contype: host
     databases: "{{ db_name }}"
     users: "{{ db_user_name }}"
