@@ -3,7 +3,7 @@
     zone: xoh.systems
     record: "{{ maas_domain }}"
     type: CNAME
-    value: "{{ ansible_product_serial | lower }}"
+    value: "{{ ansible_product_serial | lower }}.xoh.systems"
     api_token: "{{ secrets.cloudflare_token_dns_xoh_systems }}"
     state: present
 
