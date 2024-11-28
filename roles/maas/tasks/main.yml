@@ -98,6 +98,11 @@
   retries: 10
   delay: 30
 
+- name: Set default disk wipe behavior
+  ansible.builtin.command:
+    cmd: "maas {{ maas_admin_name }} maas set-config name={{ item.name }} value={{ item.value }}"
+  with_items: "{{ wipe_behavior }}"
+
 - name: Disable configuration intro
   ansible.builtin.command:
     cmd: "maas {{ maas_admin_name }} maas set-config name=completed_intro value=true"
