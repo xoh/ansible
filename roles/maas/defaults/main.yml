@@ -8,8 +8,8 @@ maas_images:
   - { os: ubuntu, release: "noble", arches: "amd64", subarches: "*", labels: "*" }
 wipe_behavior:
   - { name: "enable_disk_erasing_on_release", value: "true" }
-  - { name: "disk_erase_with_secure_erase", value: "true" }
-  - { name: "disk_erase_with_quick_erase", value: "false" }
+  - { name: "disk_erase_with_secure_erase", value: "false" }
+  - { name: "disk_erase_with_quick_erase", value: "true" }
 maas_url: "http://{{ maas_domain }}:5240/MAAS"
 maas_deploy_default: noble
 maas_commission_default: noble
