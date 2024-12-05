@@ -27,15 +27,23 @@
   ansible.builtin.command:
     cmd: "maas {{ maas_admin_name }} maas get-config name=upstream_dns"
   register: current_upstream_dns
+  changed_when: false
 
 - name: Set MAAS upstream DNS
   ansible.builtin.command:
     cmd: "maas {{ maas_admin_name }} maas set-config name=upstream_dns value=\"{{ upstream_dns }}\""
   when: ("\"" ~ upstream_dns ~ "\"") != current_upstream_dns.stdout_lines[-1]
 
+- name: Get MAAS region name
+  ansible.builtin.command:
+    cmd: "maas {{ maas_admin_name }} maas get-config name=maas_name"
+  register: current_region_name
+  changed_when: false
+
 - name: Set MAAS region name
   ansible.builtin.command:
     cmd: "maas {{ maas_admin_name }} maas set-config name=maas_name value=\"{{ maas_name }}\""
+  when: ("\"" ~ maas_name ~ "\"") != current_region_name.stdout_lines[-1]
 
 - name: Define MAAS images
   ansible.builtin.command:
@@ -50,6 +58,12 @@
   ansible.builtin.command:
     cmd: "maas {{ maas_admin_name }} boot-resources import"
 
+- name: Get commissioning default
+  ansible.builtin.command:
+    cmd: "maas {{ maas_admin_name }} maas get-config name=commissioning_distro_series"
+  register: current_commissioning_default
+  changed_when: false
+
 - name: Set commissioning default
   ansible.builtin.command:
     cmd: "maas {{ maas_admin_name }} maas set-config name=commissioning_distro_series value={{ maas_commission_default }}"
@@ -57,6 +71,13 @@
   until: set_comm_def is not failed
   retries: 10
   delay: 30
+  when: ("\"" ~ maas_commission_default ~ "\"") != current_commissioning_default.stdout_lines[-1]
+
+- name: Get deploy default
+  ansible.builtin.command:
+    cmd: "maas {{ maas_admin_name }} maas get-config name=default_distro_series"
+  register: current_deploy_default
+  changed_when: false
 
 - name: Set deploy default
   ansible.builtin.command:
@@ -65,12 +86,50 @@
   until: set_dep_def is not failed
   retries: 10
   delay: 30
+  when: ("\"" ~ maas_deploy_default ~ "\"") != current_deploy_default.stdout_lines[-1]
 
 - name: Set default disk wipe behavior
+  block:
+    - name: Get erasing_on_release
+      ansible.builtin.command:
+        cmd: "maas {{ maas_admin_name }} maas get-config name=enable_disk_erasing_on_release"
+      register: current_erasing_on_release
+      changed_when: false
+
+    - name: Get secure_erase
+      ansible.builtin.command:
+        cmd: "maas {{ maas_admin_name }} maas get-config name=disk_erase_with_secure_erase"
+      register: current_secure_erase
+      changed_when: false
+
+    - name: Get quick_erase
+      ansible.builtin.command:
+        cmd: "maas {{ maas_admin_name }} maas get-config name=disk_erase_with_quick_erase"
+      register: current_quick_erase
+      changed_when: false
+
+    - name: Set erasing_on_release
+      ansible.builtin.command:
+        cmd: "maas {{ maas_admin_name }} maas set-config name=enable_disk_erasing_on_release value={{ enable_disk_erasing_on_release }}"
+      when: enable_disk_erasing_on_release != current_erasing_on_release.stdout_lines[-1]
+
+    - name: Set secure_erase
+      ansible.builtin.command:
+        cmd: "maas {{ maas_admin_name }} maas set-config name=disk_erase_with_secure_erase value={{ disk_erase_with_secure_erase }}"
+      when: disk_erase_with_secure_erase != current_secure_erase.stdout_lines[-1]
+
+    - name: Set quick_erase
+      ansible.builtin.command:
+        cmd: "maas {{ maas_admin_name }} maas set-config name=disk_erase_with_quick_erase value={{ disk_erase_with_quick_erase }}"
+      when: disk_erase_with_quick_erase != current_quick_erase.stdout_lines[-1]
+
+- name: Get intro state
   ansible.builtin.command:
-    cmd: "maas {{ maas_admin_name }} maas set-config name={{ item.name }} value={{ item.value }}"
-  with_items: "{{ wipe_behavior }}"
+    cmd: "maas {{ maas_admin_name }} maas get-config name=completed_intro"
+  register: intro_state
+  changed_when: false
 
 - name: Disable configuration intro
   ansible.builtin.command:
     cmd: "maas {{ maas_admin_name }} maas set-config name=completed_intro value=true"
+  when: current_quick_erase.stdout_lines[-1] != true
