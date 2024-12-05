@@ -21,3 +21,8 @@
     - provider.tf
     - required_providers.tf
     - variables.tf
+
+- name: Apply terraform configuration
+  cloud.terraform.terraform:
+    project_path: "~/terraform"
+    state: present
