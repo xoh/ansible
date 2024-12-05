@@ -13,7 +13,7 @@
 - name: Add terraform files
   ansible.builtin.template:
     src: "templates/{{ item }}.j2"
-    dest: "~/terraform"
+    dest: "~/terraform/{{ item }}"
   with_items:
     - import.tf
     - main.tf
