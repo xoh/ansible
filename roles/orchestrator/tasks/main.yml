@@ -1,0 +1,7 @@
+- name: Add local orchestrator user
+  ansible.builtin.user:
+    name: orchestrator
+    create_home: true
+    generate_ssh_key: true
+    ssh_key_bits: 4096
+    ssh_key_file: .ssh/id_rsa
