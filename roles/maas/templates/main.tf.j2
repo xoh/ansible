@@ -1,0 +1,5 @@
+resource "maas_dns_domain" "maas" {
+  name          = var.memory
+  is_default    = true
+  authoritative = false
+}

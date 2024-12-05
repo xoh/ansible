@@ -19,6 +19,10 @@
   ansible.builtin.include_tasks:
     file: configure.yml
 
+- name: Extended configuration utilizing terraform
+  ansible.builtin.include_tasks:
+    file: terraform.yml
+
 - name: Continue MAAS setup
   debug:
     msg: "Continue to {{ maas_url }} to finish the installation"

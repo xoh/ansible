@@ -1,0 +1,23 @@
+- name: Query API key
+  ansible.builtin.command:
+    cmd: "maas apikey --username {{ maas_admin_name }}"
+  register: maas_apikey
+  changed_when: false
+
+- name: Create terraform working directory
+  ansible.builtin.file:
+    path: terraform
+    state: directory
+    mode: '0700'
+
+- name: Add terraform files
+  ansible.builtin.template:
+    src: "templates/{{ item }}.j2"
+    dest: terraform/
+  with_items:
+    - import.tf
+    - main.tf
+    - outputs.tf
+    - provider.tf
+    - required_providers.tf
+    - variables.tf

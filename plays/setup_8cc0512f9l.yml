@@ -17,5 +17,6 @@
         maas_admin_key: "gh:xoh"
         maas_name: "lls21"
         maas_domain: "maas.xoh.systems"
+        maas_dns_domain: "xoh.systems"
   vars_files:
     - "{{ bootstrap_vault }}"
