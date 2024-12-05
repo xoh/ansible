@@ -6,14 +6,14 @@
 
 - name: Create terraform working directory
   ansible.builtin.file:
-    path: "{{ home }}/terraform"
+    path: "~/terraform"
     state: directory
     mode: '0700'
 
 - name: Add terraform files
   ansible.builtin.template:
     src: "templates/{{ item }}.j2"
-    dest: "{{ home }}/terraform"
+    dest: "~/terraform"
   with_items:
     - import.tf
     - main.tf
