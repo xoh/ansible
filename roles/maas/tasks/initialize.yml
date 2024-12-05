@@ -1,0 +1,16 @@
+- name: Check if MAAS is initialized
+  lineinfile: 
+    dest: "/var/snap/maas/current/regiond.conf"
+    line: "database_pass: {{ db_user_password }}"
+  check_mode: true
+  register: initialized
+
+- name: Initialize MAAS
+  ansible.builtin.command:
+    cmd: "maas init region+rack --database-uri \"postgres://{{ db_user_name }}:{{ db_user_password }}@localhost/{{ db_name }}\" --maas-url \"{{ maas_url }}\""
+  when: initialized.changed
+
+- name: Create MAAS admin
+  ansible.builtin.command:
+    cmd: "maas createadmin --username {{ maas_admin_name }} --password {{ maas_admin_password }} --email {{ maas_admin_mail }} --ssh-import {{ maas_admin_key }}"
+  when: initialized.changed

@@ -7,105 +7,17 @@
     api_token: "{{ secrets.cloudflare_token_dns_xoh_systems }}"
     state: present
 
-- name: Disable systemd-timesyncd
-  ansible.builtin.systemd:
-    name: systemd-timesyncd
-    state: stopped
-    enabled: false
-
-- name: Install MAAS via SNAP
-  community.general.snap:
-    name: maas
-    channel: "{{ maas_version }}"
-  register: maas_installed
-
-- name: Check if MAAS is initialized
-  lineinfile: 
-    dest: "/var/snap/maas/current/regiond.conf"
-    line: "database_pass: {{ db_user_password }}"
-  check_mode: true
-  register: initialized
+- name: Install MAAS
+  ansible.builtin.include_tasks:
+    file: install.yml
 
 - name: Initialize MAAS
-  ansible.builtin.command:
-    cmd: "maas init region+rack --database-uri \"postgres://{{ db_user_name }}:{{ db_user_password }}@localhost/{{ db_name }}\" --maas-url \"{{ maas_url }}\""
-  when: initialized.changed
+  ansible.builtin.include_tasks:
+    file: initialize.yml
 
-- name: Create MAAS admin
-  ansible.builtin.command:
-    cmd: "maas createadmin --username {{ maas_admin_name }} --password {{ maas_admin_password }} --email {{ maas_admin_mail }} --ssh-import {{ maas_admin_key }}"
-  when: initialized.changed
-
-- name: Query API key
-  ansible.builtin.command:
-    cmd: "maas apikey --username {{ maas_admin_name }}"
-  register: maas_apikey
-  changed_when: false
-
-- name: Wait for DNS & API Endpoint
-  wait_for:
-    host: "{{ maas_domain }}"
-    port: 5240
-    delay: 0
-    sleep: 60
-    timeout: 900
-    msg: "Failed to connect to {{ maas_url }}. Possible DNS induced delay."
-  changed_when: false
-
-- name: Login to MAAS via API
-  ansible.builtin.command:
-    cmd: "maas login {{ maas_admin_name }} {{ maas_url }}/api/2.0/ {{ maas_apikey.stdout }}"
-  register: login
-  until: login is not failed
-  retries: 5
-  delay: 2
-  changed_when: false
-
-- name: Set MAAS upstream DNS
-  ansible.builtin.command:
-    cmd: "maas {{ maas_admin_name }} maas set-config name=upstream_dns value=\"{{ upstream_dns }}\""
-
-- name: Set MAAS region name
-  ansible.builtin.command:
-    cmd: "maas {{ maas_admin_name }} maas set-config name=maas_name value=\"{{ maas_name }}\""
-
-- name: Define MAAS images
-  ansible.builtin.command:
-    cmd: "maas {{ maas_admin_name }} boot-source-selections create 1 os='{{ item.os }}' release='{{ item.release }}' arches='{{ item.arches }}' subarches='{{ item.subarches }}' labels='{{ item.labels }}'"
-  with_items: "{{ maas_images }}"
-  register: maas_image_command
-  failed_when:
-    - maas_image_command.rc != 0
-    - '"Boot source selection with this Boot source, Os and Release already exists" not in maas_image_command.stdout'
-
-- name: Initiate image download
-  ansible.builtin.command:
-    cmd: "maas {{ maas_admin_name }} boot-resources import"
-
-- name: Set commissioning default
-  ansible.builtin.command:
-    cmd: "maas {{ maas_admin_name }} maas set-config name=commissioning_distro_series value={{ maas_commission_default }}"
-  register: set_comm_def
-  until: set_comm_def is not failed
-  retries: 10
-  delay: 30
-
-- name: Set deploy default
-  ansible.builtin.command:
-    cmd: "maas {{ maas_admin_name }} maas set-config name=default_distro_series value={{ maas_deploy_default }}"
-  register: set_dep_def
-  until: set_dep_def is not failed
-  retries: 10
-  delay: 30
-
-- name: Set default disk wipe behavior
-  ansible.builtin.command:
-    cmd: "maas {{ maas_admin_name }} maas set-config name={{ item.name }} value={{ item.value }}"
-  with_items: "{{ wipe_behavior }}"
-
-- name: Disable configuration intro
-  ansible.builtin.command:
-    cmd: "maas {{ maas_admin_name }} maas set-config name=completed_intro value=true"
+- name: Configure MAAS
+  ansible.builtin.include_tasks:
+    file: configure.yml
 
 - name: Continue MAAS setup
   debug:

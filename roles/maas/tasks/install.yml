@@ -1,0 +1,11 @@
+- name: Disable systemd-timesyncd
+  ansible.builtin.systemd:
+    name: systemd-timesyncd
+    state: stopped
+    enabled: false
+
+- name: Install MAAS via SNAP
+  community.general.snap:
+    name: maas
+    channel: "{{ maas_version }}"
+  register: maas_installed
