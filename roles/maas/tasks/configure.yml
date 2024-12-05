@@ -23,9 +23,15 @@
   delay: 2
   changed_when: false
 
+- name: Get MAAS upstream DNS
+  ansible.builtin.command:
+    cmd: "maas {{ maas_admin_name }} maas get-config name=upstream_dns"
+  register: current_upstream_dns
+
 - name: Set MAAS upstream DNS
   ansible.builtin.command:
     cmd: "maas {{ maas_admin_name }} maas set-config name=upstream_dns value=\"{{ upstream_dns }}\""
+  when: ("\"" ~ upstream_dns ~ "\"") != current_upstream_dns.stdout_lines[-1]
 
 - name: Set MAAS region name
   ansible.builtin.command:
