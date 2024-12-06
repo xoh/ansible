@@ -28,3 +28,9 @@
     force_init: true
     state: present
   check_mode: true
+
+- name: Delete terraform working directory
+  ansible.builtin.file:
+    path: "~/terraform"
+    state: absent
+  check_mode: true
