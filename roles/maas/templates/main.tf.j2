@@ -20,7 +20,7 @@ resource "unifi_network" "infrastructure" {
   ipv6_ra_enable = true
   ipv6_ra_priority = "high"
   multicast_dns = true
-  subnet = "172.16.6.0/24"
+  subnet = "172.16.6.254/24"
   vlan_id = 6
   dhcpd_boot_enabled = true
   dhcpd_boot_filename = "/bootx64.efi"
