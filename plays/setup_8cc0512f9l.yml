@@ -18,5 +18,9 @@
         maas_name: "lls21"
         maas_domain: "maas.xoh.systems"
         maas_dns_domain: "xoh.systems"
+        configure_unifi_dhcp: true
+        unifi_url: "https://172.16.6.254/"
+        unifi_user: "{{ unifi_terraform_user }}"
+        unifi_pass: "{{ unifi_terraform_pass }}"
   vars_files:
     - "{{ bootstrap_vault }}"

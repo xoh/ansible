@@ -4,5 +4,12 @@ terraform {
       source = "canonical/maas"
       version = "2.4.0"
     }
+{% if configure_unifi_dhcp %}
+
+    unifi = {
+      source = "ubiquiti-community/unifi"
+      version = "0.41.2"
+    }
+{% endif %}
   }
 }

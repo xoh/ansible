@@ -27,3 +27,4 @@
     project_path: "~/terraform"
     force_init: true
     state: present
+  check_mode: true

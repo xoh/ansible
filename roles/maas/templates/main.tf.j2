@@ -3,3 +3,28 @@ resource "maas_dns_domain" "maas" {
   is_default    = true
   authoritative = false
 }
+{% if configure_unifi_dhcp %}
+
+resource "unifi_network" "infrastructure" {
+  name = "Infrastructure"
+  purpose = "corporate"
+  dhcp_enabled = true
+  dhcp_start = "172.16.6.1"
+  dhcp_stop = "172.16.6.64"
+  dhcp_v6_start = "::2"
+  dhcp_v6_stop = "::7d1"
+  igmp_snooping = "true"
+  intra_network_access_enabled = false
+  ipv6_pd_start = "::2"
+  ipv6_pd_stop = "::7d1"
+  ipv6_ra_enable = true
+  ipv6_ra_priority = "high"
+  multicast_dns = true
+  subnet = "172.16.6.0/24"
+  vlan_id = 6
+  dhcpd_boot_enabled = true
+  dhcpd_boot_filename = "/bootx64.efi"
+  dhcpd_boot_server = var.tftp_ip
+  ipv6_ra_valid_lifetime = 0
+}
+{% endif %}

@@ -3,3 +3,11 @@ provider "maas" {
   api_key     = "{{ maas_apikey.stdout }}"
   api_url     = "{{ maas_url }}"
 }
+{% if configure_unifi_dhcp %}
+provider "unifi" {
+  username = "{{ unifi_user }}"
+  password = "{{ unifi_pass }}"
+  api_url = "{{ unifi_url }}"
+  allow_insecure = true
+}
+{% endif %}

@@ -3,3 +3,15 @@ variable "domain" {
     type    = string
     default = "{{ maas_dns_domain }}"
 }
+
+variable "unifi_network_id" {
+    description = "ID of unifi network to be configured for DHCP"
+    type = string
+    default = "63677c7052ce7e0c8fc1104d"
+}
+
+variable "tftp_ip" {
+    description = "IP address for pxe boot"
+    type = string
+    default = "{{ ansible_default_ipv4.address|default(ansible_all_ipv4_addresses[0]) }}"
+}

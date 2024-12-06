@@ -10,5 +10,6 @@ enable_disk_erasing_on_release: "true"
 disk_erase_with_secure_erase: "false"
 disk_erase_with_quick_erase: "true"
 maas_url: "http://{{ maas_domain }}:5240/MAAS"
+maas_dns_domain: "{{ maas_domain }}"
 maas_deploy_default: noble
 maas_commission_default: noble
