@@ -123,6 +123,17 @@
         cmd: "maas {{ maas_admin_name }} maas set-config name=disk_erase_with_quick_erase value={{ disk_erase_with_quick_erase }}"
       when: disk_erase_with_quick_erase != current_quick_erase.stdout_lines[-1]
 
+- name: Get analytics state
+  ansible.builtin.command:
+    cmd: "maas {{ maas_admin_name }} maas get-config name=enable_analytics"
+  register: analytics_state
+  changed_when: false
+
+- name: Disable analytics
+  ansible.builtin.command:
+    cmd: "maas {{ maas_admin_name }} maas set-config name=enable_analytics value=false"
+  when: analytics_state.stdout_lines[-1] != "true"
+
 - name: Get intro state
   ansible.builtin.command:
     cmd: "maas {{ maas_admin_name }} maas get-config name=completed_intro"
