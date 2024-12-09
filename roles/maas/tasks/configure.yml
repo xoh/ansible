@@ -132,4 +132,4 @@
 - name: Disable configuration intro
   ansible.builtin.command:
     cmd: "maas {{ maas_admin_name }} maas set-config name=completed_intro value=true"
-  when: current_quick_erase.stdout_lines[-1] != "true"
+  when: intro_state.stdout_lines[-1] != "true"
