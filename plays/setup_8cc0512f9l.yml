@@ -22,5 +22,8 @@
         unifi_url: "https://172.16.6.254/"
         unifi_user: "{{ secrets.unifi_terraform_user }}"
         unifi_pass: "{{ secrets.unifi_terraform_pass }}"
+    - role: orchestrator
+      vars:
+        orchestrator_homedir: "/home/xoh"
   vars_files:
     - "{{ bootstrap_vault }}"

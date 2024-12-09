@@ -1,7 +1,16 @@
-- name: Add local orchestrator user
-  ansible.builtin.user:
-    name: orchestrator
-    create_home: true
-    generate_ssh_key: true
-    ssh_key_bits: 4096
-    ssh_key_file: .ssh/id_rsa
+- name: Add local SSH key (private)
+  copy:
+    content: "{{ keys.ssh_private_key }}"
+    dest: "{{ orchestrator_homedir }}/.ssh/id_rsa"
+    mode: 0600
+
+- name: Add local SSH key (public)
+  copy:
+    content: "{{ keys.ssh_public_key }}"
+    dest: "{{ orchestrator_homedir }}/.ssh/id_rsa.pub"
+    mode: 0644
+
+- name: Clone ansible repository
+  ansible.builtin.git:
+    repo: 'https://github.com/xoh/ansible.git'
+    dest: "{{ orchestrator_homedir }}/ansible"
