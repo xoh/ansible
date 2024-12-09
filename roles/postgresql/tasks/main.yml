@@ -8,12 +8,12 @@
 - name: Get PostgreSQL repo key
   ansible.builtin.get_url:
     url: https://www.postgresql.org/media/keys/ACCC4CF8.asc
-    dest: "{{ postgres_key_location }}"
+    dest: "{{ key_location }}"
     checksum: sha256:0144068502a1eddd2a0280ede10ef607d1ec592ce819940991203941564e8e76
 
 - name: Add PostgreSQL APT repository
   ansible.builtin.apt_repository:
-    repo: "deb [arch=amd64 signed-by={{ postgres_key_location }}] https://apt.postgresql.org/pub/repos/apt {{ ansible_distribution_release }}-pgdg main"
+    repo: "deb [arch=amd64 signed-by={{ key_location }}] https://apt.postgresql.org/pub/repos/apt {{ ansible_distribution_release }}-pgdg main"
     state: present
 
 - name: Install PostgreSQL & psycopg2 Python library
