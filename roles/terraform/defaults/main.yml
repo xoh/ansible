@@ -1,1 +1,1 @@
-key_location: /usr/share/keyrings/hashicorp-archive-keyring.asc
+hashicorp_key_location: /usr/share/keyrings/hashicorp-archive-keyring.asc

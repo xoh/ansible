@@ -7,12 +7,12 @@
 - name: Get HashiCorp repo key
   ansible.builtin.get_url:
     url: https://apt.releases.hashicorp.com/gpg
-    dest: "{{ key_location }}"
+    dest: "{{ hashicorp_key_location }}"
     checksum: sha256:cafb01beac341bf2a9ba89793e6dd2468110291adfbb6c62ed11a0cde6c09029
 
 - name: Add HashiCorp APT repository
   ansible.builtin.apt_repository:
-    repo: "deb [arch=amd64 signed-by={{ key_location }}] https://apt.releases.hashicorp.com {{ ansible_distribution_release }} main"
+    repo: "deb [arch=amd64 signed-by={{ hashicorp_key_location }}] https://apt.releases.hashicorp.com {{ ansible_distribution_release }} main"
     state: present
 
 - name: Install terraform

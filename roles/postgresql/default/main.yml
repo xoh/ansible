@@ -1,1 +1,1 @@
-key_location: /usr/share/keyrings/postgres-archive-keyring.asc
+postgres_key_location: /usr/share/keyrings/postgres-archive-keyring.asc
