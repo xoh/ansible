@@ -132,7 +132,7 @@
 - name: Disable analytics
   ansible.builtin.command:
     cmd: "maas {{ maas_admin_name }} maas set-config name=enable_analytics value=false"
-  when: analytics_state.stdout_lines[-1] != "true"
+  when: analytics_state.stdout_lines[-1] != "false"
 
 - name: Get intro state
   ansible.builtin.command:
