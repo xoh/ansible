@@ -1,0 +1,15 @@
+key_location: /usr/share/keyrings/hashicorp-archive-keyring.asc
+
+enable_vault_ui: "true"
+disable_mlock: "true"
+
+vault_node_id: "{{ ansible_product_serial | lower }}"
+
+vault_config_directory: "/etc/vault"
+vault_data_directory: "/var/vault/data"
+
+vault_tcp_listen_ip: "{{ ansible_default_ipv4.address|default(ansible_all_ipv4_addresses[0]) }}"
+vault_api_ip: "{{ ansible_default_ipv4.address|default(ansible_all_ipv4_addresses[0]) }}"
+vault_cluster_ip: "{{ ansible_default_ipv4.address|default(ansible_all_ipv4_addresses[0]) }}"
+
+vault_binary_location: "/usr/bin/vault"
