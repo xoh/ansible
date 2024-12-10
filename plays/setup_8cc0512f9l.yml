@@ -25,5 +25,6 @@
     - role: orchestrator
       vars:
         orchestrator_homedir: "/home/xoh"
+    - role: vault
   vars_files:
     - "{{ bootstrap_vault }}"
