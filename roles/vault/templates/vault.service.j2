@@ -1,7 +1,7 @@
 [Unit]
 Description="HashiCorp Vault"
 Documentation="https://developer.hashicorp.com/vault/docs"
-ConditionFileNotEmpty="{{ vault_config_directory }}/vault.hcl"
+ConditionFileNotEmpty="{{ vault_config_directory }}/config.hcl"
 
 [Service]
 User=vault
@@ -10,7 +10,7 @@ SecureBits=keep-caps
 AmbientCapabilities=CAP_IPC_LOCK
 CapabilityBoundingSet=CAP_SYSLOG CAP_IPC_LOCK
 NoNewPrivileges=yes
-ExecStart={{ vault_binary_location }} server -config={{ vault_config_directory }}/vault.hcl
+ExecStart={{ vault_binary_location }} server -config={{ vault_config_directory }}/config.hcl
 ExecReload=/bin/kill --signal HUP
 KillMode=process
 KillSignal=SIGINT
