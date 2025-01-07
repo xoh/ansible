@@ -1,66 +1,10 @@
-- name: Install dependencies
-  ansible.builtin.apt:
-    name:
-      - software-properties-common
-    update_cache: true
+- name: Install Vault
+  ansible.builtin.include_tasks:
+    file: install.yml
 
-- name: Get HashiCorp repo key
-  ansible.builtin.get_url:
-    url: https://apt.releases.hashicorp.com/gpg
-    dest: "{{ key_location }}"
-    checksum: sha256:cafb01beac341bf2a9ba89793e6dd2468110291adfbb6c62ed11a0cde6c09029
-
-- name: Add HashiCorp APT repository
-  ansible.builtin.apt_repository:
-    repo: "deb [arch=amd64 signed-by={{ key_location }}] https://apt.releases.hashicorp.com {{ ansible_distribution_release }} main"
-    state: present
-
-- name: Install HashiCorp vault
-  ansible.builtin.apt:
-    name:
-      - vault
-    update_cache: true
-
-- name: Create vault group
-  ansible.builtin.group:
-    name: vault
-    state: present
-
-- name: Create vault user
-  ansible.builtin.user:
-    name: vault
-    group: vault
-    state: present
-
-- name: Create vault config directory
-  ansible.builtin.file:
-    path: "{{ vault_config_directory }}"
-    mode: '0770'
-    owner: vault
-    group: vault
-    state: directory
-
-- name: Create vault data directory
-  ansible.builtin.file:
-    path: "{{ vault_data_directory }}"
-    mode: '0770'
-    owner: vault
-    group: vault
-    state: directory
-
-- name: Add vault config file
-  ansible.builtin.template:
-    src: "config.hcl.j2"
-    dest: "{{ vault_config_directory }}/config.hcl"
-    owner: vault
-    group: vault
-    mode: '0660'
-
-- name: Add vault systemd service file
-  ansible.builtin.template:
-    src: "vault.service.j2"
-    dest: "/lib/systemd/system/vault.service"
-    mode: '0644'
+- name: Configure Vault
+  ansible.builtin.include_tasks:
+    file: configure.yml
 
 - name: Activate and start vault service
   ansible.builtin.systemd_service:
