@@ -1,0 +1,24 @@
+- name: Initialize Raft
+  ansible.builtin.command:
+    cmd: "vault operator init -format=json -key-shares=1 -key-threshold=1 -address=\"http://{{ vault_api_ip }}:8200\""
+  register: vault_cluster_seed
+
+- name: Unseal Key b64
+  debug:
+    msg: "{{ vault_cluster_seed.stdout | from_json | community.general.json_query('unseal_keys_b64[0]') }}"
+
+- name: Unseal Key hex
+  debug:
+    msg: "{{ vault_cluster_seed.stdout | from_json | community.general.json_query('unseal_keys_hex[0]') }}"
+
+- name: Unseal Root Token
+  debug:
+    msg: "{{ vault_cluster_seed.stdout | from_json | community.general.json_query('root_token') }}"
+
+- name: Full Vault Cluster Seed
+  debug:
+    msg: "{{ vault_cluster_seed.stdout | from_json | to_nice_json }}"
+
+- name: Unseal Vault
+  ansible.builtin.command:
+    cmd: "vault operator unseal -address=\"http://{{ vault_api_ip }}:8200\" {{ vault_cluster_seed.stdout | from_json | community.general.json_query('unseal_keys_hex[0]') | quote }}"
